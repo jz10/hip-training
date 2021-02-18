@@ -57,6 +57,14 @@ Note here that we:
 
 Cmake version:
 ```
+$ module load cmake
+$ module load hipcl/master-20210208  
+$ mkdir build
+$ cd build
+$ HIP_PATH=/soft/compilers/clang-hipcl/8.0-20210108/ cmake ../
+$ make
+$ ./saxpy_hip 
+Max error: 0.000000
 ```
 
 ### 2B. Compile and run HIP code with HIPLZ
