@@ -44,6 +44,7 @@ more complicated)
 
 Makefile version:
 ```
+$ cd hipcl
 $ make
 clang++ -c -o saxpy_hip.o saxpy_hip.cpp -std=c++11
 clang++-link -o saxpy_hip saxpy_hip.o -lOpenCL -lhipcl
@@ -57,8 +58,8 @@ Note here that we:
 
 Cmake version:
 ```
+$ cd hipcl
 $ module load cmake
-$ module load hipcl/master-20210208  
 $ mkdir build
 $ cd build
 $ HIP_PATH=/soft/compilers/clang-hipcl/8.0-20210108/ cmake ../
@@ -69,10 +70,26 @@ Max error: 0.000000
 
 ### 2B. Compile and run HIP code with HIPLZ
 
+First set the environment:
 ```
 $ module use /soft/modulefiles # put the appropriate modules in your path
 $ module purge # remove any modules from your environment
 $ module load intel_compute_runtime # puts the latest Intel OpenCL and L0 runtimes in your environment
-$ module load hipcl
+$ module load hiplz
 
 ```
+Makefile version:
+```
+$ cd hiplz
+$ make
+clang++ -c -o saxpy_hip.o saxpy_hip.cpp -std=c++11
+clang++-link -o saxpy_hip saxpy_hip.o -lOpenCL -lhipcl -lze_loader
+$ ./saxpy_hip 
+Max error: 0.000000
+```
+
+Note here that we:
+ - compile with "clang++"
+ - link with "clang++-link" and flags "-lOpenCL -lhipcl -lze_loader"
+
+Cmake version:
