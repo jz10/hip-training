@@ -92,4 +92,6 @@ Note here that we:
  - compile with "clang++"
  - link with "clang++-link" and flags "-lOpenCL -lhipcl -lze_loader"
 
-Cmake version:
+## Pitfalls
+
+1. Make sure to point to the FindHIP.cmake which is inside of the HIPCL repo
