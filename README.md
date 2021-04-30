@@ -95,3 +95,8 @@ Note here that we:
 ## Pitfalls
 
 1. Make sure to point to the FindHIP.cmake which is inside of the HIPCL repo
+2. Please review the issues here:
+[Known libHIPCL Issues](https://github.com/cpc/hipcl#known-libhipcl-issues) to
+see if a function you want to use is implemented
+3. Note that constant memory is not supported on Intel Gen9 GPUs, so general
+device memory should be used instead.
