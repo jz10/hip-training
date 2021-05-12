@@ -47,7 +47,7 @@ It contains Intel Gen9 GPUs, which HIPCL and HIPLZ can target.
 
 This tutorial assumes you have access to JLSE.
 
-## Steps to compile and run simple examples in this repo 
+## Steps to compile and run examples in the "simple" subdirectory in this repo 
 
 ### 1. Get a Intel Gen9 GPU node on JLSE
 
@@ -75,7 +75,7 @@ more complicated)
 
 Makefile version:
 ```
-$ cd hipcl
+$ cd simple/hipcl
 $ make
 clang++ -c -o saxpy_hip.o saxpy_hip.cpp -std=c++11
 clang++-link -o saxpy_hip saxpy_hip.o -lOpenCL -lhipcl
@@ -89,7 +89,7 @@ Note here that we:
 
 Cmake version:
 ```
-$ cd hipcl
+$ cd simple/hipcl
 $ module load cmake
 $ mkdir build
 $ cd build
@@ -111,7 +111,7 @@ $ module load hiplz
 ```
 Makefile version:
 ```
-$ cd hiplz
+$ cd simple/hiplz
 $ make
 clang++ -c -o saxpy_hip.o saxpy_hip.cpp -std=c++11
 clang++-link -o saxpy_hip saxpy_hip.o -lOpenCL -lhipcl -lze_loader
@@ -121,7 +121,7 @@ Max error: 0.000000
 
 Cmake version:
 ```
-$ cd hiplz
+$ cd simple/hiplz
 $ module load cmake
 $ mkdir build
 $ cd build
@@ -134,6 +134,70 @@ Max error: 0.000000
 Note here that we:
  - compile with "clang++"
  - link with "clang++-link" and flags "-lOpenCL -lhipcl -lze_loader"
+
+
+## Steps to compile and run examples in the "mpi" subdirectory in this repo 
+
+### 1. Get a Intel Gen9 GPU node on JLSE
+
+To get an interactive job (i.e. a job with a shell) on one of
+the Intel Gen9 GPUs on JLSE
+ 
+```
+$ qsub -I -n 1 -q iris -t 360
+```
+
+### 2A. Compile and run HIP code with HIPCL
+
+First set the environment:
+
+```
+$ module use /soft/modulefiles # put the appropriate modules in your path
+$ module purge # remove any modules from your environment
+$ module load intel_compute_runtime # puts the latest Intel OpenCL and L0 runtimes in your environment
+$ module load hipcl
+$ module load openmpi
+$ module unload -f cuda llvm
+```
+
+Makefile version:
+```
+$ cd mpi/hipcl
+$ make
+OMPI_CXX=clang++ mpicxx -c -o saxpy_hip_mpi.o saxpy_hip_mpi.cpp -std=c++11
+OMPI_CXX=clang++-link mpicxx  -o saxpy_hip_mpi saxpy_hip_mpi.o -lOpenCL -lhipcl
+$ mpirun -n 2 ./saxpy_hip_mpi
+Rank: 1 Device: 0
+Rank: 0 Device: 0
+Max error: 0.000000
+Max error: 0.000000
+```
+
+### 2B. Compile and run HIP code with HIPLZ
+
+First set the environment:
+```
+$ module use /soft/modulefiles # put the appropriate modules in your path
+$ module purge # remove any modules from your environment
+$ module load intel_compute_runtime # puts the latest Intel OpenCL and L0 runtimes in your environment
+$ module load hiplz
+$ module load openmpi
+$ module unload -f cuda llvm
+
+```
+Makefile version:
+```
+$ cd mpi/hiplz
+$ make
+OMPI_CXX=clang++ mpicxx -c -o saxpy_hip_mpi.o saxpy_hip_mpi.cpp -std=c++11
+OMPI_CXX=clang++-link mpicxx  -o saxpy_hip_mpi saxpy_hip_mpi.o -lOpenCL -lhipcl -lze_loader
+$ mpirun -n 2 ./saxpy_hip_mpi
+Rank: 1 Device: 0
+Rank: 0 Device: 0
+Max error: 0.000000
+Max error: 0.000000
+```
+
 
 ## Debugging and Profiling
 
