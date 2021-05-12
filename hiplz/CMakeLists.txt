@@ -12,7 +12,7 @@ endif()
 # set CMAKE_MODULE_PATH to point to the right FindHIP.cmake
 # note this change 
 #set(CMAKE_MODULE_PATH "${HIP_PATH}/cmake" ${CMAKE_MODULE_PATH})
-set(CMAKE_MODULE_PATH "/soft/compilers/hipcl/master-202010208/cmake" ${CMAKE_MODULE_PATH})
+set(CMAKE_MODULE_PATH "$ENV{HIPLZ_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 project(hello)
 
