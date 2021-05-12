@@ -93,7 +93,7 @@ $ cd hipcl
 $ module load cmake
 $ mkdir build
 $ cd build
-$ HIP_PATH=/soft/compilers/clang-hipcl/8.0-20210108/ cmake ../
+$ cmake ../
 $ make
 $ ./saxpy_hip 
 Max error: 0.000000
@@ -125,7 +125,7 @@ $ cd hiplz
 $ module load cmake
 $ mkdir build
 $ cd build
-$ HIP_PATH=/soft/compilers/clang-hipcl/8.0-20210108/ cmake ../
+$ cmake ../
 $ make
 $ ./saxpy_hip 
 Max error: 0.000000
