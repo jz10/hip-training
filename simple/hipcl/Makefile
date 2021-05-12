@@ -2,14 +2,13 @@ CXX=clang++
 LD=clang++-link
 CFLAGS=-std=c++11
 LDFLAGS=-lOpenCL -lhipcl
-OBJ = saxpy_hip.o
 
 all: saxpy_hip
 
 saxpy_hip.o: saxpy_hip.cpp
 	$(CXX) -c -o $@ $< $(CFLAGS)
 
-saxpy_hip: $(OBJ)
+saxpy_hip: saxpy_hip.o
 	$(LD) -o $@ $^ $(LDFLAGS)
 
 clean:
