@@ -198,6 +198,32 @@ Max error: 0.000000
 Max error: 0.000000
 ```
 
+## Steps to compile and run examples in the "mkl" subdirectory in this repo 
+
+### 1. Get a Intel Gen9 GPU node on JLSE
+
+To get an interactive job (i.e. a job with a shell) on one of the Intel Gen9 GPUs on JLSE
+
+```
+$ qsub -I -n 1 -q iris -t 360
+```
+
+
+### 2B. Compile and run HIPLZ and MKL Interoperability Example
+
+Note that this example uses two different compilers that are switched within the Makefile. However, both use the same base modules:
+```
+$ module use /soft/modulefiles # put the appropriate modules in your path
+$ module purge # remove any modules from your environment
+$ module load intel_compute_runtime # puts the latest Intel OpenCL and L0 runtimes in your environment
+```
+
+Makefile version:
+```
+$ cd mkl/hiplz
+$ make
+$ <output_tbd>
+```
 
 ## Debugging and Profiling
 
