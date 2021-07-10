@@ -209,9 +209,9 @@ $ qsub -I -n 1 -q iris -t 360
 ```
 
 
-### 2B. Compile and run HIPLZ and MKL Interoperability Example
+### 2A. Compile and run HIPLZ and MKL Interoperability Example
 
-Note that this example uses two different compilers that are switched within the Makefile. However, both use the same base modules:
+Note that this example uses two different compilers that are switched within the Makefile. However, both use the same base module in the Intel runtime. The included Makefile also shows which modules are needed to compile each file.
 ```
 $ module use /soft/modulefiles # put the appropriate modules in your path
 $ module purge # remove any modules from your environment
