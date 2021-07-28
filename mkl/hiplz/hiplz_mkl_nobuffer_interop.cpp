@@ -13,19 +13,19 @@ using namespace std;
 const int WIDTH = 10;
 
 bool ValueSame(float a, float b) {
-  return std::fabs(a-b) < 1.0e-08;
+  return std::fabs(a-b) < 1.0e-08;  
 }
 
-void VerifyResult(vector<float>& c_A, vector<float>& c_B) {
+void VerifyResult(float *c_A, float *c_B) {
   bool MismatchFound = false;
 
   for (size_t i=0; i < WIDTH; i++) {
     for (size_t j=0; j < WIDTH; j++) {
       if (!ValueSame(c_A[i*WIDTH+j], c_B[i*WIDTH+j])) {
-        std::cout << "fail - The result is incorrect for element: [" << i << ", " << j
-                  << "], expected: " << c_A[i*WIDTH+j] << " , but got: " << c_B[i*WIDTH+j]
-                  << std::endl;
-       
+	std::cout << "fail - The result is incorrect for element: [" << i << ", " << j
+		  << "], expected: " << c_A[i*WIDTH+j] << " , but got: " << c_B[i*WIDTH+j]
+		  << std::endl;
+	//	exit(1);
         MismatchFound = true;
       }
     }
@@ -39,11 +39,12 @@ void VerifyResult(vector<float>& c_A, vector<float>& c_B) {
 }
 
 int main() { 
-  vector<float> A(100, 1);
-  vector<float> B(100, 2);
-  vector<float> C(100, 0);
-  vector<float> C_serial(100, 0);
-  
+  float * A = (float *) malloc(WIDTH*WIDTH*sizeof(float));
+  float * B = (float *) malloc(WIDTH*WIDTH*sizeof(float));
+  float * C = (float *) malloc(WIDTH*WIDTH*sizeof(float));
+  float * C_serial = (float *) malloc(WIDTH*WIDTH*sizeof(float));
+
+  float *d_A, *d_B, *d_C;
   // matrix data sizes
   int m, n, k;
   m = n = k = WIDTH;
@@ -61,9 +62,14 @@ int main() {
   int numItems = 0;
   hiplzStreamNativeInfo(stream, nativeHandlers, &numItems);
 
-  // initialize data on the host  
-  // prepare matrix data with ROW-major style   
-  // A(M, N)   
+  // Allocate memory with HIP
+  hipMalloc( &d_A, WIDTH*WIDTH*sizeof(float));
+  hipMalloc( &d_B, WIDTH*WIDTH*sizeof(float));
+  hipMalloc( &d_C, WIDTH*WIDTH*sizeof(float));
+
+  // initialize data on the host
+    // prepare matrix data with ROW-major style
+  // A(M, N)
   for (size_t i=0; i<WIDTH; i++)
     for (size_t j=0; j<WIDTH; j++)
       A[i*WIDTH + j] = i*WIDTH + j;
@@ -83,9 +89,15 @@ int main() {
     }
   }
 
-  
-  // Invoke oneMKL GEEM
-  oneMKLGemmTest(nativeHandlers, A.data(), B.data(), C.data(), m, m, k, ldA, ldB, ldC, alpha, beta);
+  // copy A and B to the device
+  hipMemcpy(d_A, A, WIDTH*WIDTH*sizeof(float), hipMemcpyHostToDevice);
+  hipMemcpy(d_B, B, WIDTH*WIDTH*sizeof(float), hipMemcpyHostToDevice);
+
+  // Invoke oneMKL GEMM
+  oneMKLGemmTest(nativeHandlers, d_A, d_B, d_C, WIDTH, WIDTH, WIDTH, ldA, ldB, ldC, alpha, beta);
+
+  // copy back C
+  hipMemcpy(C, d_C, WIDTH*WIDTH*sizeof(float), hipMemcpyDeviceToHost);
 
   // check results
   std::cout << "Verify results between OneMKL & Serial: ";

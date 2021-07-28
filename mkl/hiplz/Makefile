@@ -10,33 +10,49 @@ DPCPP_CXX=clang++
 DPCPP_LDFLAGS=-DMKL_ILP64 -lmkl_sycl -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core
 DPCPP_CFLAGS=-fsycl -shared -fPIC
 
-EXE=hiplz_mkl_interop
+MKL_EXE=hiplz_mkl_interop
+MKL_NB_EXE=hiplz_mkl_nobuffer_interop
 
-HIPLZ_OBJ = ${EXE}.o
+MKL_OBJ = ${MKL_EXE}.o
+MKL_NB_OBJ = ${MKL_NB_EXE}.o
 SYCL_LIB = onemkl_gemm_wrapper.so
 
-all: ${EXE}.exe
+all: ${MKL_EXE}.exe ${MKL_NB_EXE}.exe
 
+# Note that we are loading modules here and then purging the environment at the end
+# This is because we need to build the SYCL library with one tool and then link with another tool 
 ${SYCL_LIB}: onemkl_gemm_wrapper.cpp
 	module unload hiplz/HIAI05-12; \
 	module use /home/jyoung/gpfs_share/compilers/modulefiles/oneapi/2020.2.0.2997/; \
 	module load mkl compiler; \
-	$(DPCPP_CXX) $(DPCPP_LDFLAGS) -o $@ $< $(DPCPP_CFLAGS)
+	$(DPCPP_CXX) $(DPCPP_LDFLAGS) -o $@ $< $(DPCPP_CFLAGS); \
+	module unload mkl compiler
 
-${EXE}.o: ${EXE}.cpp
-	module unload compiler; \
+${MKL_EXE}.o: ${MKL_EXE}.cpp
 	module load hiplz/HIAI05-12; \
 	$(CXX) -c -o $@ $< $(CFLAGS)
 
-${EXE}.exe: $(HIPLZ_OBJ) $(SYCL_LIB)
+${MKL_EXE}.exe: $(MKL_OBJ) $(SYCL_LIB)
+	module load hiplz/HIAI05-12; \
+	$(LD) -o $@ $^ $(LDFLAGS)
+
+## No Buffer version of the code
+${MKL_NB_EXE}.o: ${MKL_NB_EXE}.cpp
+	module load hiplz/HIAI05-12; \
+	$(CXX) -c -o $@ $< $(CFLAGS)
+
+${MKL_NB_EXE}.exe: $(MKL_NB_OBJ) $(SYCL_LIB)
 	module load hiplz/HIAI05-12; \
 	$(LD) -o $@ $^ $(LDFLAGS)
 
 clean:
-	rm -f ${EXE}.o ${EXE} ${SYCL_LIB}
+	rm -f *.o *.exe ${SYCL_LIB}
 
-run:  
-	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:. ./$(EXE).exe
+run_mkl:
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:. ./$(MKL_EXE).exe
+
+run_mkl_nb:
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:. ./$(MKL_NB_EXE).exe
 
 .PHONY: clean all
 
