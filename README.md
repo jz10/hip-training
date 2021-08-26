@@ -228,7 +228,7 @@ clang++ -c -o hiplz_mkl_interop.o hiplz_mkl_interop.cpp -g -pthread -std=c++14 -
 
 //Compile the MKL function into a shared library with OneAPI
 module unload hiplz/HIAI05-12; \
-module use /home/jyoung/gpfs_share/compilers/modulefiles/oneapi/2020.2.0.2997/; \
+module use /home/ac.jyoung/gpfs_share/compilers/modulefiles/oneapi/2020.2.0.2997/; \
 module load mkl compiler; \
 clang++ -DMKL_ILP64 -lmkl_sycl -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -o onemkl_gemm_wrapper.so onemkl_gemm_wrapper.cpp -fsycl -shared -fPIC
 
@@ -241,7 +241,7 @@ Loading dpl version 2021.2.0
 Loading oclfpga version 2021.2.0
 
 Loading compiler/latest
-  Loading requirement: debugger/latest dpl/latest /gpfs/jlse-fs0/users/jyoung/compilers/oneapi/2020.2.0/compiler/2021.2.0/linux/lib/oclfpga/modulefiles/oclfpga
+  Loading requirement: debugger/latest dpl/latest /gpfs/jlse-fs0/users/ac.jyoung/compilers/oneapi/2020.2.0/compiler/2021.2.0/linux/lib/oclfpga/modulefiles/oclfpga
 module load hiplz/HIAI05-12; \
 clang++-link -o hiplz_mkl_interop.exe hiplz_mkl_interop.o onemkl_gemm_wrapper.so -L /soft/libraries/pocl/OpenCL-ICD-Loader/build-v2020.06.16/ -lOpenCL -lze_loader -lhiplz
 
