@@ -1,7 +1,7 @@
 MPICXX=OMPI_CXX=clang++ mpicxx
 MPILD=OMPI_CXX=clang++-link mpicxx 
 CFLAGS=-std=c++11
-LDFLAGS=-lOpenCL -lhipcl -lze_loader
+LDFLAGS=-lOpenCL -lhiplz -lze_loader
 OBJ = 
 
 all: saxpy_hip_mpi

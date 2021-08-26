@@ -19,7 +19,7 @@ all: ${EXE}.exe
 
 ${SYCL_LIB}: onemkl_gemm_wrapper.cpp
 	module unload hiplz/HIAI05-12; \
-	module use /home/jyoung/gpfs_share/compilers/modulefiles/oneapi/2020.2.0.2997/; \
+	module use /home/ac.jyoung/gpfs_share/compilers/modulefiles/oneapi/2020.2.0.2997/; \
 	module load mkl compiler; \
 	$(DPCPP_CXX) $(DPCPP_LDFLAGS) -o $@ $< $(DPCPP_CFLAGS)
 

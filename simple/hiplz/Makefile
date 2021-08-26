@@ -1,7 +1,7 @@
 CXX=clang++
 LD=clang++-link
 CFLAGS=-std=c++11
-LDFLAGS=-lOpenCL -lhipcl -lze_loader
+LDFLAGS=-lOpenCL -lhiplz -lze_loader
 OBJ = saxpy_hip.o
 
 all: saxpy_hip
