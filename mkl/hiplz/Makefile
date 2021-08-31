@@ -18,24 +18,29 @@ SYCL_LIB = onemkl_gemm_wrapper.so
 all: ${EXE}.exe
 
 ${SYCL_LIB}: onemkl_gemm_wrapper.cpp
-	module unload hiplz/HIAI05-12; \
-	module use /home/ac.jyoung/gpfs_share/compilers/modulefiles/oneapi/2020.2.0.2997/; \
+	module unload hiplz; \
+	module use /home/ac.jyoung/gpfs_share/compilers/modulefiles/oneapi/2021.3.0/; \
 	module load mkl compiler; \
 	$(DPCPP_CXX) $(DPCPP_LDFLAGS) -o $@ $< $(DPCPP_CFLAGS)
 
 ${EXE}.o: ${EXE}.cpp
 	module unload compiler; \
-	module load hiplz/HIAI05-12; \
+	module load hiplz; \
 	$(CXX) -c -o $@ $< $(CFLAGS)
 
 ${EXE}.exe: $(HIPLZ_OBJ) $(SYCL_LIB)
-	module load hiplz/HIAI05-12; \
+	module use /home/ac.jyoung/gpfs_share/compilers/modulefiles/oneapi/2021.3.0/; \
+	module load mkl; \
+	module load hiplz; \
 	$(LD) -o $@ $^ $(LDFLAGS)
 
 clean:
 	rm -f ${EXE}.o ${EXE} ${SYCL_LIB}
 
-run:  
+run:
+	module use /home/ac.jyoung/gpfs_share/compilers/modulefiles/oneapi/2021.3.0/; \
+	module load mkl; \
+	module load hiplz
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:. ./$(EXE).exe
 
 .PHONY: clean all
