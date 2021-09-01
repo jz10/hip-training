@@ -228,20 +228,23 @@ clang++ -c -o hiplz_mkl_interop.o hiplz_mkl_interop.cpp -g -pthread -std=c++14 -
 
 //Compile the MKL function into a shared library with OneAPI
 module unload hiplz/HIAI05-12; \
-module use /home/jyoung/gpfs_share/compilers/modulefiles/oneapi/2020.2.0.2997/; \
+module use /home/ac.jyoung/gpfs_share/compilers/modulefiles/oneapi/2021.3.0/; \
 module load mkl compiler; \
 clang++ -DMKL_ILP64 -lmkl_sycl -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -o onemkl_gemm_wrapper.so onemkl_gemm_wrapper.cpp -fsycl -shared -fPIC
 
 //This is the linking stage to combine HIPLZ code and the MKL SYCL library
 Unloading hiplz/HIAI05-12
   WARNING: Did not unuse /soft/packaging/spack-builds/modules/linux-opensuse_leap15-x86_64
-Loading compiler version 2021.2.0
-Loading debugger version 10.1.1
-Loading dpl version 2021.2.0
-Loading oclfpga version 2021.2.0
+Loading compiler version 2021.3.0
+Loading tbb version 2021.3.0
+Loading compiler-rt version 2021.3.0
+Loading debugger version 10.1.2
+Loading dpl version 2021.4.0
+Loading oclfpga version 2021.3.0
+Loading init_opencl version 2021.3.0
 
 Loading compiler/latest
-  Loading requirement: debugger/latest dpl/latest /gpfs/jlse-fs0/users/jyoung/compilers/oneapi/2020.2.0/compiler/2021.2.0/linux/lib/oclfpga/modulefiles/oclfpga
+  Loading requirement: tbb/latest compiler-rt/latest debugger/latest dpl/latest /gpfs/jlse-fs0/users/ac.jyoung/compilers/oneapi/2021.3.0/compiler/2021.3.0/linux/lib/oclfpga/modulefiles/init_opencl oclfpga/latest
 module load hiplz/HIAI05-12; \
 clang++-link -o hiplz_mkl_interop.exe hiplz_mkl_interop.o onemkl_gemm_wrapper.so -L /soft/libraries/pocl/OpenCL-ICD-Loader/build-v2020.06.16/ -lOpenCL -lze_loader -lhiplz
 
