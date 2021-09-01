@@ -29,17 +29,13 @@ int onemkl_gemm(sycl::queue& my_queue, float* A, float* B, float* C, int m, int 
     }
   };
    
-  // create sycl buffers of matrix data for offloading between device and host 
-  sycl::buffer<float, 1> A_buffer(A, m * n);
-  sycl::buffer<float, 1> B_buffer(B, m * n);
-  sycl::buffer<float, 1> C_buffer(C, m * n);
   // add oneapi::mkl::blas::gemm to execution queue and catch any synchronous exceptions  
   try {
-    oneapi::mkl::blas::column_major::gemm(my_queue,
-					  oneapi::mkl::transpose::nontrans,
-					  oneapi::mkl::transpose::nontrans,
-					  m, n, k, alpha,
-					  A_buffer, ldA, B_buffer, ldB, beta, C_buffer, ldC);
+    oneapi::mkl::blas::gemm(my_queue,
+			    oneapi::mkl::transpose::nontrans,
+			    oneapi::mkl::transpose::nontrans,
+			    m, n, k, alpha,
+			    A, ldA, B, ldB, beta, C, ldC);
   } catch (sycl::exception const& e) {
     std::cout << "\t\tCaught synchronous SYCL exception during GEMM:\n"
               << e.what() << std::endl;

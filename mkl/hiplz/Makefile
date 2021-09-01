@@ -2,13 +2,13 @@ CXX=clang++
 LD=clang++-link
 CFLAGS=-g -pthread -std=c++14 -fPIE
 #Add -x hip if you are not using the clang wrappers on JLSE
-LDFLAGS=-L /soft/libraries/pocl/OpenCL-ICD-Loader/build-v2020.06.16/ -lOpenCL -lze_loader -lhiplz
+LDFLAGS=-L /soft/libraries/pocl/OpenCL-ICD-Loader/build-v2020.06.16/ -lOpenCL -lze_loader -lhiplz -g
 
 # Include compiler and flags for DPC++
 # Note we specify this as a different variable as it uses the OneAPI version of clang++
 DPCPP_CXX=clang++
 DPCPP_LDFLAGS=-DMKL_ILP64 -lmkl_sycl -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core
-DPCPP_CFLAGS=-fsycl -shared -fPIC
+DPCPP_CFLAGS=-fsycl -shared -fPIC -g
 
 EXE=hiplz_mkl_interop
 
@@ -32,7 +32,7 @@ ${EXE}.exe: $(HIPLZ_OBJ) $(SYCL_LIB)
 	module use /home/ac.jyoung/gpfs_share/compilers/modulefiles/oneapi/2021.3.0/; \
 	module load mkl; \
 	module load hiplz; \
-	$(LD) -o $@ $^ $(LDFLAGS)
+	$(LD) -o $@ $^ -Wl,-rpath,.  $(LDFLAGS)
 
 clean:
 	rm -f ${EXE}.o ${EXE} ${SYCL_LIB}
@@ -40,8 +40,8 @@ clean:
 run:
 	module use /home/ac.jyoung/gpfs_share/compilers/modulefiles/oneapi/2021.3.0/; \
 	module load mkl; \
-	module load hiplz
-	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:. ./$(EXE).exe
+	module load hiplz; \
+	 ./$(EXE).exe
 
 .PHONY: clean all
 
