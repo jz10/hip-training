@@ -35,4 +35,7 @@ set_source_files_properties(${MY_SOURCE_FILES} PROPERTIES HIP_SOURCE_PROPERTY_FO
 
 # hip_add_executable macro is similar to the cuda_add_executable macro that is provided by FindCUDA
 # Ok, I just realized that FindCUDA is deprecated, so need to figure out a different way
+
+SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -lze_loader")
+
 hip_add_executable(${MY_TARGET_NAME} ${MY_SOURCE_FILES} HIPCC_OPTIONS ${MY_HIPCC_OPTIONS} HCC_OPTIONS ${MY_HCC_OPTIONS} NVCC_OPTIONS ${MY_NVCC_OPTIONS})
