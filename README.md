@@ -168,7 +168,7 @@ $ cd simple/chip-spirv
 $ module load cmake
 $ mkdir build
 $ cd build
-$ CXX=hipcc cmake ../
+$ cmake -DCMAKE_CXX_COMPILER=clang++ ../
 $ make
 $ ./saxpy_hip 
 Max error: 0.000000
