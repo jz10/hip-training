@@ -10,7 +10,7 @@ list(APPEND CMAKE_PREFIX_PATH $ENV{HIP_PATH})
 find_package(hip)
 
 # Set compiler and linker
-set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Debug)
 
 # Create the excutable
 add_executable(saxpy_hip saxpy_hip.cpp)
