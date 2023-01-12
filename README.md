@@ -58,7 +58,45 @@ the Intel Gen9 GPUs on JLSE
 $ qsub -I -n 1 -q iris -t 360
 ```
 
-### 2A. Compile and run HIP code with HIPCL
+### 2A. Compile and run HIP code with CHIP-SPV
+
+First set the environment:
+
+```
+$ module use /soft/modulefiles # put the appropriate modules in your path
+$ module use /home/pvelesko/local/modulefiles
+$ module purge # remove any modules from your environment
+$ module load intel_compute_runtime # puts the latest Intel OpenCL and L0 runtimes in your environment
+$ module load HIP/clang15/chip-spv-develop-debug
+```
+
+Next compile the simple HIP codes. There are two examples, one with
+just a makefile (the simplest version) and one with cmake (slightly
+more complicated)
+
+Makefile version:
+```
+$ cd simple/chip-spirv
+$ make
+hipcc -c -o saxpy_hip.o saxpy_hip.cpp 
+hipcc -o saxpy_hip saxpy_hip.o 
+$ ./saxpy_hip 
+Max error: 0.000000
+```
+
+Cmake version:
+```
+$ cd simple/chip-spirv
+$ module load cmake
+$ mkdir build
+$ cd build
+$ cmake -DCMAKE_CXX_COMPILER=clang++ ../
+$ make
+$ ./saxpy_hip 
+Max error: 0.000000
+```
+
+### 2B. Compile and run HIP code with HIPCL (deprecated)
 
 First set the environment:
 
@@ -99,7 +137,7 @@ $ ./saxpy_hip
 Max error: 0.000000
 ```
 
-### 2B. Compile and run HIP code with HIPLZ
+### 2C. Compile and run HIP code with HIPLZ (deprecated)
 
 First set the environment:
 ```
@@ -136,43 +174,6 @@ Note here that we:
  - link with "clang++-link" and flags "-lOpenCL -lhipcl -lze_loader"
 
 
-### 2C. Compile and run HIP code with CHIP-SPV
-
-First set the environment:
-
-```
-$ module use /soft/modulefiles # put the appropriate modules in your path
-$ module use /home/pvelesko/local/modulefiles
-$ module purge # remove any modules from your environment
-$ module load intel_compute_runtime # puts the latest Intel OpenCL and L0 runtimes in your environment
-$ module load HIP/clang15/chip-spv-0.9-release
-```
-
-Next compile the simple HIP codes. There are two examples, one with
-just a makefile (the simplest version) and one with cmake (slightly
-more complicated)
-
-Makefile version:
-```
-$ cd simple/chip-spirv
-$ make
-hipcc -c -o saxpy_hip.o saxpy_hip.cpp 
-hipcc -o saxpy_hip saxpy_hip.o 
-$ ./saxpy_hip 
-Max error: 0.000000
-```
-
-Cmake version:
-```
-$ cd simple/chip-spirv
-$ module load cmake
-$ mkdir build
-$ cd build
-$ cmake -DCMAKE_CXX_COMPILER=clang++ ../
-$ make
-$ ./saxpy_hip 
-Max error: 0.000000
-```
 
 
 ## Steps to compile and run examples in the "mpi" subdirectory in this repo 
