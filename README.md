@@ -66,10 +66,9 @@ First set the environment:
 
 ```
 $ module use /soft/modulefiles # put the appropriate modules in your path
-$ module use /home/pvelesko/local/modulefiles
 $ module purge # remove any modules from your environment
 $ module load intel_compute_runtime # puts the latest Intel OpenCL and L0 runtimes in your environment
-$ module load HIP/clang15/chip-spv-develop-debug
+$ module load chip-spv-Release
 ```
 
 Next compile the simple HIP codes. There are two examples, one with
@@ -78,7 +77,7 @@ more complicated)
 
 Makefile version:
 ```
-$ cd simple/chip-spirv
+$ cd simple
 $ make
 hipcc -c -o saxpy_hip.o saxpy_hip.cpp 
 hipcc -o saxpy_hip saxpy_hip.o 
@@ -88,7 +87,7 @@ Max error: 0.000000
 
 Cmake version:
 ```
-$ cd simple/chip-spirv
+$ cd simple
 $ module load cmake
 $ mkdir build
 $ cd build
@@ -110,7 +109,7 @@ the Intel Gen9 GPUs on JLSE
 $ qsub -I -n 1 -q iris -t 360
 ```
 
-### 2A. Compile and run HIP code with HIPCL
+### 2A. Compile and run HIP code with CHIP-SPV
 
 First set the environment:
 
@@ -118,42 +117,17 @@ First set the environment:
 $ module use /soft/modulefiles # put the appropriate modules in your path
 $ module purge # remove any modules from your environment
 $ module load intel_compute_runtime # puts the latest Intel OpenCL and L0 runtimes in your environment
-$ module load hipcl
+$ module load chip-spv-Release
 $ module load openmpi
 $ module unload -f cuda llvm
 ```
 
 Makefile version:
 ```
-$ cd mpi/hipcl
+$ cd mpi
 $ make
 OMPI_CXX=clang++ mpicxx -c -o saxpy_hip_mpi.o saxpy_hip_mpi.cpp -std=c++11
 OMPI_CXX=clang++-link mpicxx  -o saxpy_hip_mpi saxpy_hip_mpi.o -lOpenCL -lhipcl
-$ mpirun -n 2 ./saxpy_hip_mpi
-Rank: 1 Device: 0
-Rank: 0 Device: 0
-Max error: 0.000000
-Max error: 0.000000
-```
-
-### 2B. Compile and run HIP code with HIPLZ
-
-First set the environment:
-```
-$ module use /soft/modulefiles # put the appropriate modules in your path
-$ module purge # remove any modules from your environment
-$ module load intel_compute_runtime # puts the latest Intel OpenCL and L0 runtimes in your environment
-$ module load hiplz
-$ module load openmpi
-$ module unload -f cuda llvm
-
-```
-Makefile version:
-```
-$ cd mpi/hiplz
-$ make
-OMPI_CXX=clang++ mpicxx -c -o saxpy_hip_mpi.o saxpy_hip_mpi.cpp -std=c++11
-OMPI_CXX=clang++-link mpicxx  -o saxpy_hip_mpi saxpy_hip_mpi.o -lOpenCL -lhipcl -lze_loader
 $ mpirun -n 2 ./saxpy_hip_mpi
 Rank: 1 Device: 0
 Rank: 0 Device: 0
