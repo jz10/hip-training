@@ -22,22 +22,18 @@ This repository contains instructions for people who want to try running HIP app
 
 [HIPLZ](https://github.com/jz10/anl-gt-gpu) is an implementation of the HIP API on top of [Intel's Level Zero API](https://spec.oneapi.com/level-zero/latest/index.html). 
 
-[CHIP-SPV] (https://github.com/CHIP-SPV/chip-spv) is an implementation of the HIP API on top of Intel's Level Zero API and OpenCL. This is a replacement for HIPLZ and HIPCL as it can run on both backends.
+[CHIP-SPV](https://github.com/CHIP-SPV/chip-spv) is an implementation of the HIP API on top of Intel's Level Zero API and OpenCL. This is a replacement for HIPLZ and HIPCL as it can run on both backends.
 
 CHIP-SPV, HIPCL, and HIPLZ can run on Intel GPUs. That is, OpenCL and Level Zero can both be used as backends of HIP to run on Intel GPUs. However, not all functions have been implemented yet, see the Known Issues and Pitfalls section
 
 ## Known Issues and Pitfalls
 
-### Known Issues
+### Support Status
 1. Please review the issues here:
-[Known libHIPCL Issues](https://github.com/cpc/hipcl#known-libhipcl-issues) to
-see if a function you want to use is implemented in HIPCL. We don't currently have the
-equivalent list for HIPLZ, but it is planned.
-2. Note that constant memory is not properly handled by HIPCL/HIPLZ compiler for now, so general device memory should be used instead.
+[CHIP-SPV Support status](https://github.com/CHIP-SPV/chip-spv/blob/main/docs/Features.md).
 
 ### Pitfalls
-1. If you use cmake on JLSE, make sure to point to the FindHIP.cmake which is inside of the HIPCL repo
-2. Although currently math libraries like Intel MKL will run on Intel GPUs, we have not yet tested compiling or running a HIP application with HIPCL/HIPLZ and linking an Intel math library.
+1. If you use cmake on JLSE, make sure to point to the FindHIP.cmake which is inside of the CHIP-SPV repo
 
 ## What is JLSE?
 
@@ -68,7 +64,7 @@ First set the environment:
 $ module use /soft/modulefiles # put the appropriate modules in your path
 $ module purge # remove any modules from your environment
 $ module load intel_compute_runtime # puts the latest Intel OpenCL and L0 runtimes in your environment
-$ module load chip-spv-Release
+$ module load chip-spv-release
 ```
 
 Next compile the simple HIP codes. There are two examples, one with
@@ -117,7 +113,7 @@ First set the environment:
 $ module use /soft/modulefiles # put the appropriate modules in your path
 $ module purge # remove any modules from your environment
 $ module load intel_compute_runtime # puts the latest Intel OpenCL and L0 runtimes in your environment
-$ module load chip-spv-Release
+$ module load chip-spv-release
 $ module load openmpi
 $ module unload -f cuda llvm
 ```
