@@ -56,7 +56,7 @@ the Intel Gen9 GPUs on JLSE
 $ qsub -I -n 1 -q iris -t 360
 ```
 
-### 2A. Compile and run HIP code with CHIP-SPV
+### 2. Compile and run HIP code with CHIP-SPV
 
 First set the environment:
 
@@ -64,7 +64,7 @@ First set the environment:
 $ module use /soft/modulefiles # put the appropriate modules in your path
 $ module purge # remove any modules from your environment
 $ module load intel_compute_runtime # puts the latest Intel OpenCL and L0 runtimes in your environment
-$ module load chip-spv-release
+$ module load chip-spv
 ```
 
 Next compile the simple HIP codes. There are two examples, one with
@@ -105,7 +105,7 @@ the Intel Gen9 GPUs on JLSE
 $ qsub -I -n 1 -q iris -t 360
 ```
 
-### 2A. Compile and run HIP code with CHIP-SPV
+### 2. Compile and run HIP code with CHIP-SPV
 
 First set the environment:
 
@@ -113,17 +113,16 @@ First set the environment:
 $ module use /soft/modulefiles # put the appropriate modules in your path
 $ module purge # remove any modules from your environment
 $ module load intel_compute_runtime # puts the latest Intel OpenCL and L0 runtimes in your environment
-$ module load chip-spv-release
-$ module load openmpi
-$ module unload -f cuda llvm
+$ module load chip-spv
+$ module load openmpi/4.1.1-llvm
 ```
 
 Makefile version:
 ```
 $ cd mpi
 $ make
-OMPI_CXX=clang++ mpicxx -c -o saxpy_hip_mpi.o saxpy_hip_mpi.cpp -std=c++11
-OMPI_CXX=clang++-link mpicxx  -o saxpy_hip_mpi saxpy_hip_mpi.o -lOpenCL -lhipcl
+OMPI_CXX=hipcc mpicxx -c -o saxpy_hip_mpi.o saxpy_hip_mpi.cpp 
+OMPI_CXX=hipcc mpicxx -o saxpy_hip_mpi saxpy_hip_mpi.o 
 $ mpirun -n 2 ./saxpy_hip_mpi
 Rank: 1 Device: 0
 Rank: 0 Device: 0
