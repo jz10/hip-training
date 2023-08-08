@@ -64,7 +64,7 @@ First set the environment:
 $ module use /soft/modulefiles # put the appropriate modules in your path
 $ module purge # remove any modules from your environment
 $ module load intel_compute_runtime # puts the latest Intel OpenCL and L0 runtimes in your environment
-$ module load chip-spv
+$ module load chipStar
 ```
 
 Next compile the simple HIP codes. There are two examples, one with
@@ -113,7 +113,7 @@ First set the environment:
 $ module use /soft/modulefiles # put the appropriate modules in your path
 $ module purge # remove any modules from your environment
 $ module load intel_compute_runtime # puts the latest Intel OpenCL and L0 runtimes in your environment
-$ module load chip-spv
+$ module load chipStar
 $ module load openmpi/4.1.1-llvm
 ```
 
