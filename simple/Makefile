@@ -4,7 +4,7 @@ all: saxpy_hip saxpy_cuda
 saxpy_hip: saxpy_hip.cpp
 	hipcc -o $@ $^
 
-saxpy_cuda: saxpy_cuda.cpp
+saxpy_cuda: saxpy_cuda.cu
 	nvcc -o $@ $^
 
 clean:
